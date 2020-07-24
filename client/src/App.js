@@ -1,24 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Dropdown from './components/Dropdown/Dropdown';
 import Navbar from './components/Navbar/Navbar';
 import NavbarItem from './components/Navbar/NavbarItem';
+import { useApplicationData } from './hook/useApplicationData';
 
 
 function App() {
-  const [drivers, setDrivers] = useState([]);
-  useEffect(() => {
-    fetch('/api/drivers')
-    .then(res => res.json())
-    .then(drivers => setDrivers(drivers))
-  }, [])
+  const { GetDrivers } = useApplicationData();
   
   return (
     <div className="App">
       <Navbar>
         <NavbarItem icon="😀">
-          <Dropdown items={drivers}/>
+          <Dropdown items={ GetDrivers() }/>
  
         </NavbarItem>
       </Navbar>
