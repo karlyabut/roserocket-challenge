@@ -10,6 +10,5 @@ export function useApplicationData() {
     }, [])
     return drivers;
   }
-
   return { GetDrivers }
 }
