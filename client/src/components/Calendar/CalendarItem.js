@@ -2,9 +2,10 @@ import React from 'react';
 
 function CalendarItem(props) {
   return (
-    <a href="#" onClick={ props.onClick }>
-      { props.children }
-    </a>
+    <div>
+      <h1>{ props.name }</h1>
+      <h1>{ props.id }</h1>
+    </div>
   )
 }
 

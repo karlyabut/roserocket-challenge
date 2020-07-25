@@ -11,8 +11,15 @@ import { useApplicationData } from './hook/useApplicationData';
 
 
 function App() {
-  const { state } = useApplicationData();
-  const [task, setTask] = useState([]);
+  const { state, addTask } = useApplicationData();
+  const [driver, setDriver] = useState([]);
+  //give driver.task a defaul of [] on render
+  if(!driver.task) {
+    return driver.task = []
+  }
+  console.log(state)
+  const index = state.drivers.indexOf(driver)
+  console.log("this is the index", index)
 
   return (
     <div className="App">
@@ -22,7 +29,7 @@ function App() {
             { state.drivers.map(driver => {
               return <DropdownItem
                       key={ driver.id }
-                      onClick={() => setTask(driver.task)}
+                      onClick={() => setDriver(driver)}
                       >
                         { driver.firstName }
                       </DropdownItem>
@@ -30,12 +37,11 @@ function App() {
           </Dropdown>
         </NavbarItem>
       </Navbar>
+      <button onClick={() => addTask(index) }>click me</button>
       <Calendar>
-        {task.map(task => {
+        {driver.task.map(task => {
           return (
-            <h1>
-              {task.id}
-            </h1>
+            <CalendarItem name={ task.description } id={ task.id } />
           )
         })}
       </Calendar>

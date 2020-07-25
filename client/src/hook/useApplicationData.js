@@ -6,15 +6,14 @@ export function useApplicationData() {
     drivers: []
   });
   console.log(state.drivers)
-  state.drivers.map(a => {
-    console.log(a.id)
-  })
+  // state.drivers.map(a => {
+  //   console.log(a.id)
+  // })
   //API CALL
   useEffect(() => {
     fetch('/api/drivers')
     .then(res => res.json())
     .then((drivers) => {
-      console.log(drivers)
       dispatch({
         type: SET_APPLICATION_DATA,
         value: drivers
@@ -25,8 +24,17 @@ export function useApplicationData() {
     })
   }, [])
   function addTask(id) {
-    
+    const task = {
+      ...state.drivers[id]
+    }
+    console.log(task.task)
+    // fetch(`/api/drivers/${id}`, {
+    //   method: 'post',
+    //   body: {id: 1, description: "some", time:"", location: ""}
+    // })
+    // .then(res => res.json())
+    // .then(data => console.log(data))
   }
 
-  return { state }
+  return { state, addTask }
 }
