@@ -3,8 +3,8 @@ import './DropdownItem.css'
 
 function DropdownItem(props) {
   return (
-    <a href="#" className="dropdown-item" onClick={ props.onClick }>
-      { props.children }
+    <a href="#" className="dropdown-item" onClick={props.onClick}>
+      {props.children}
     </a>
   )
 }

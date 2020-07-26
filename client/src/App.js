@@ -7,6 +7,7 @@ import Navbar from './components/Navbar/Navbar';
 import NavbarItem from './components/Navbar/NavbarItem';
 import Calendar from './components/Calendar/Calendar';
 import CalendarItem from './components/Calendar/CalendarItem';
+import AddTask from './components/AddTask/AddTask';
 import { useApplicationData } from './hook/useApplicationData';
 
 
@@ -21,27 +22,30 @@ function App() {
   const index = state.drivers.indexOf(driver)
   console.log("this is the index", index)
 
+  function save(description, time, location) {
+    addTask(index, description, time, location);
+  }
+
   return (
     <div className="App">
       <Navbar>
-        <NavbarItem icon="😀">
+        <NavbarItem icon="Select driver">
           <Dropdown>
-            { state.drivers.map(driver => {
+            {state.drivers.map(driver => {
               return <DropdownItem
-                      key={ driver.id }
-                      onClick={() => setDriver(driver)}
-                      >
-                        { driver.firstName }
+                      key={driver.id}
+                      onClick={() => setDriver(driver)}>
+                        {driver.firstName}
                       </DropdownItem>
             })}
           </Dropdown>
         </NavbarItem>
       </Navbar>
-      <button onClick={() => addTask(index) }>click me</button>
+      <AddTask onSave={save}/>
       <Calendar>
-        {driver.task.map(task => {
+        {driver.task.map((task, index) => {
           return (
-            <CalendarItem name={ task.description } id={ task.id } />
+            <CalendarItem key={index} description={task.description} id={task.id} />
           )
         })}
       </Calendar>

@@ -1,5 +1,6 @@
 import { useEffect, useState, useReducer } from 'react';
 import { reducer, SET_APPLICATION_DATA } from '../reducer/application';
+import axios from 'axios';
 
 export function useApplicationData() {
   const [state, dispatch] = useReducer(reducer, {
@@ -11,29 +12,24 @@ export function useApplicationData() {
   // })
   //API CALL
   useEffect(() => {
-    fetch('/api/drivers')
-    .then(res => res.json())
+    axios.get('/api/drivers')
     .then((drivers) => {
+      console.log(drivers)
       dispatch({
         type: SET_APPLICATION_DATA,
-        value: drivers
+        value: drivers.data
       })
     })
     .catch(err => {
       console.error(err);
     })
   }, [])
-  function addTask(id) {
-    const task = {
+  function addTask(id, description, time, location) {
+    const driver = {
       ...state.drivers[id]
     }
-    console.log(task.task)
-    // fetch(`/api/drivers/${id}`, {
-    //   method: 'post',
-    //   body: {id: 1, description: "some", time:"", location: ""}
-    // })
-    // .then(res => res.json())
-    // .then(data => console.log(data))
+    driver.task.push({id: 1, description: description, time: time, location: location})
+    console.log(driver.task)
   }
 
   return { state, addTask }

@@ -19,7 +19,11 @@ router.get('/api/drivers', (req, res) => {
 })
 
 router.get('/api/drivers/:id', (req, res) => {
-  res.send(getDriverById(Number(req.params.id)))
+  const driver = getDriverById(Number(req.params.id));
+  const task = driver.map(result => {
+    return result.task
+  })
+  res.send(task)
 })
 
 // router.post('/api/drivers/:id/new', (req, res) => {
