@@ -45,6 +45,21 @@ export function useApplicationData() {
         endDate: new Date(2020, endMonth - 1, endDay, endTime, 0).toISOString(), 
       })
   }
+  function updateTask(index, taskIndex, title, startDate, endDate) {
+    const driver = {
+      ...state.drivers[index]
+    }
+    if(title !== undefined){
+      driver.task[taskIndex].title = title;
+    }
+    if(startDate !== undefined) {
+      driver.task[taskIndex].startDate = startDate.toISOString();
+    }
+    if(endDate !== undefined) {
+      driver.task[taskIndex].endDate = endDate.toISOString();
+    }
+    console.log(driver.task[taskIndex].title)
+  }
   function deleteTask(index, taskIndex) {
     const driver = {
       ...state.drivers[index]
@@ -55,5 +70,5 @@ export function useApplicationData() {
     // console.log(driver);
   }
 
-  return { state, addTask, deleteTask }
+  return { state, addTask, deleteTask, updateTask }
 }
