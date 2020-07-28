@@ -5,7 +5,7 @@ function CalendarItem(props) {
     <div>
       <h1>{props.description}</h1>
       <h1>{props.id}</h1>
-      <button onClick={props.onClick}>Confirm</button>
+      <button onClick={props.onClick}>Delete</button>
     </div>
   )
 }

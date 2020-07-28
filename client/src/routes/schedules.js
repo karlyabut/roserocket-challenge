@@ -2,11 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const drivers = [
-  {id: 1, firstName: 'Michael', lastName: 'Scott', task: [{id: 1, description: 'Pick-up',time: "", location: "" }]},
-  {id: 2, firstName: 'Dwight', lastName: 'Schrute', task: [{id: 2, description: 'Deliver',time: "", location: "" }]},
-  {id: 3, firstName: 'Jim', lastName: 'Halpert', task: [{id: 1, description: 'Pick-up',time: "", location: "" }, {id: 3, description: 'Other',time: "", location: "" }]}
+  {id: 1, firstName: 'Michael', lastName: 'Scott', task: []},
+  {id: 2, firstName: 'Dwight', lastName: 'Schrute', task: []},
+  {id: 3, firstName: 'Jim', lastName: 'Halpert', task: []}
 ];
-
 function getDriverById(id){
   let driverById = drivers.filter(driver => {
     return driver.id === id;

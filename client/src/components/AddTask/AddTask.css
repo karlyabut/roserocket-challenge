@@ -1,0 +1,23 @@
+.addtask {
+  width: 500px;
+  padding:5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: bisque;
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 2rem;
+  z-index: 1000000;
+}
+.addtask-form {
+  display: flex;
+  flex-direction: row;
+  height: 500px;;
+}
+
