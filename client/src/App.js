@@ -22,28 +22,24 @@ import { useApplicationData } from './hook/useApplicationData';
 
 
 function App() {
-  const { state, addTask, deleteTask, updateTask } = useApplicationData();
+  const { state, addTask, deleteTask, updateTask, fillCalendar, downloadCSV } = useApplicationData();
   const [driver, setDriver] = useState([]);
   const [task, setTask] = useState([]);
   const [toggleDropdown, setToggleDropdown] = useState(false);
   const [toggleCreate, setToggleCreate] = useState(false);
+  const [refreshTask, setRefreshTask] = useState(false); //just a hack to render the added/udated and deleted task :(
   //give driver.task a defaul of [] on render
   if(!driver.task) {
     return driver.task = []
   }
-  // const [openNew, setOpenNew] = useState(false);
-  // console.log(state)
   const index = state.drivers.indexOf(driver)
-  // console.log(driver.task[0])
-  // console.log("this is the index", index)
-  // console.log(index, "asd")
   console.log(driver.task)
 
   function save(title, startMonth, startDay, startTime, endMonth, endDay, endTime, location) {
     addTask(index, title, startMonth, startDay, startTime, endMonth, endDay, endTime, location);
     setToggleCreate(!toggleCreate);
   }
-  function updateDelete({ changed, deleted }) {
+  function updateAndDelete({ changed, deleted }) {
     let data = driver.task;
     let deletedObject = null;
     let deletedIndex = null;
@@ -51,6 +47,8 @@ function App() {
     let changeObject = null;
     let changeIndex = null;
     
+    console.log(data);
+
     if(changed) {
       console.log("here", changed)
       const changedId = Object.keys(changed).join('')
@@ -78,7 +76,12 @@ function App() {
       deleteTask(index, deletedIndex);
       console.log(driver)
     }
-
+    setRefreshTask(!refreshTask)
+  }
+  function fill() {
+    fillCalendar(index)
+    setRefreshTask(!refreshTask)
+    console.log(driver.task)
   }
   function todaysDate() {
     let today = new Date();
@@ -87,6 +90,7 @@ function App() {
 
   return (
     <div className="App">
+      {refreshTask}
       <Navbar>
           <a href="#" className="icon-button" onClick={() => setToggleDropdown(!toggleDropdown)}>
             Select a driver
@@ -103,6 +107,8 @@ function App() {
                       </DropdownItem>
             })}
           </Dropdown>}
+          <button onClick={fill}>Fill</button>
+          <button onClick={() => downloadCSV(index)}>download</button>
       </Navbar>
       <button onClick={() => setToggleCreate(!toggleCreate)}>Create new task</button>
       { toggleCreate && <AddTask onSave={save}/>}
@@ -114,7 +120,7 @@ function App() {
           <DateNavigator/>
           <WeekView startDayHour={0} endDayHour={24}></WeekView>
           <EditingState
-            onCommitChanges={updateDelete}
+            onCommitChanges={updateAndDelete}
           />
           <IntegratedEditing/>
           <ConfirmationDialog/>

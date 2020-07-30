@@ -57,7 +57,7 @@ function AddTask(props) {
         <form onSubmit={event => event.preventDefault()}>
           <h4>Create a task</h4>
           <button onClick={() => setTitle('Pick-up')}>Pick-up</button>
-          <button onClick={() => setTitle('Deliver')}>Deliver</button>
+          <button onClick={() => setTitle('Drop-off')}>Drop-off</button>
           <input
             name={title}
             value={title}

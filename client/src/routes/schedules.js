@@ -25,10 +25,5 @@ router.get('/api/drivers/:id', (req, res) => {
   res.send(task)
 })
 
-// router.post('/api/drivers/:id/new', (req, res) => {
-//   const newTask = getDriverById(Number(req.params.id));
-//   newTask[0].push({id: 1, description: 'Other1',time: "2", location: "3" });
-//   res.send('created new task for ', req.params.id)
-// })
 
 module.exports = router;
