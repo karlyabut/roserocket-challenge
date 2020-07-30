@@ -27,13 +27,13 @@ function App() {
   const [task, setTask] = useState([]);
   const [toggleDropdown, setToggleDropdown] = useState(false);
   const [toggleCreate, setToggleCreate] = useState(false);
+  const [toggleDownload, setToggleDownload] = useState(false);
   const [refreshTask, setRefreshTask] = useState(false); //just a hack to render the added/udated and deleted task :(
   //give driver.task a defaul of [] on render
   if(!driver.task) {
     return driver.task = []
   }
   const index = state.drivers.indexOf(driver)
-  console.log(driver.task)
 
   function save(title, startMonth, startDay, startTime, endMonth, endDay, endTime, location) {
     addTask(index, title, startMonth, startDay, startTime, endMonth, endDay, endTime, location);
@@ -108,7 +108,17 @@ function App() {
             })}
           </Dropdown>}
           <button onClick={fill}>Fill</button>
-          <button onClick={() => downloadCSV(index)}>download</button>
+          <button onClick={() => downloadCSV(index, 7)}>download</button>
+          <a href="#" className="icon-button" onClick={() => setToggleDownload(!toggleDownload)}>
+            downloadby
+          </a>
+          {toggleDownload && <Dropdown>
+            <DropdownItem onClick={() => downloadCSV(index, 2)}>2</DropdownItem>
+            <DropdownItem onClick={() => downloadCSV(index, 4)}>4</DropdownItem>
+            <DropdownItem onClick={() => downloadCSV(index, 7)}>7</DropdownItem>
+            <DropdownItem onClick={() => downloadCSV(index, 14)}>14</DropdownItem>
+            <DropdownItem onClick={() => downloadCSV(index, 28)}>28</DropdownItem>
+          </Dropdown>}
       </Navbar>
       <button onClick={() => setToggleCreate(!toggleCreate)}>Create new task</button>
       { toggleCreate && <AddTask onSave={save}/>}
