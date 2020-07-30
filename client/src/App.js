@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Dropdown from './components/Dropdown/Dropdown';
 import DropdownItem from './components/Dropdown/DropdownItem';
 import Navbar from './components/Navbar/Navbar';
-import NavbarItem from './components/Navbar/NavbarItem';
-import Calendar from './components/Calendar/Calendar';
-import CalendarItem from './components/Calendar/CalendarItem';
+import Grid from '@material-ui/core/Grid';
+import Room from '@material-ui/icons/Room';
+
 import AddTask from './components/AddTask/AddTask';
 import { ViewState, EditingState, IntegratedEditing } from '@devexpress/dx-react-scheduler';
 import { 
@@ -24,10 +23,11 @@ import { useApplicationData } from './hook/useApplicationData';
 function App() {
   const { state, addTask, deleteTask, updateTask, fillCalendar, downloadCSV } = useApplicationData();
   const [driver, setDriver] = useState([]);
-  const [task, setTask] = useState([]);
   const [toggleDropdown, setToggleDropdown] = useState(false);
+  const [toggleCreateBtn, setToggleCreateBtn] = useState(false);
   const [toggleCreate, setToggleCreate] = useState(false);
   const [toggleDownload, setToggleDownload] = useState(false);
+  const [toggleDownloadButton, setToggleDownloadButton] = useState(false);
   const [refreshTask, setRefreshTask] = useState(false); //just a hack to render the added/udated and deleted task :(
   //give driver.task a defaul of [] on render
   if(!driver.task) {
@@ -39,6 +39,9 @@ function App() {
     addTask(index, title, startMonth, startDay, startTime, endMonth, endDay, endTime, location);
     setToggleCreate(!toggleCreate);
   }
+  function closeForm() {
+    setToggleCreate(false);
+  }
   function updateAndDelete({ changed, deleted }) {
     let data = driver.task;
     let deletedObject = null;
@@ -46,8 +49,6 @@ function App() {
 
     let changeObject = null;
     let changeIndex = null;
-    
-    console.log(data);
 
     if(changed) {
       console.log("here", changed)
@@ -61,7 +62,7 @@ function App() {
       })
       console.log("index", changeIndex)
       console.log(changeObject);
-      updateTask(index, changeIndex, changed[changedId].title, changed[changedId].startDate, changed[changedId].endDate);
+      updateTask(index, changeIndex, changed[changedId].title, changed[changedId].startDate, changed[changedId].endDate, changed[changedId].location);
     }
 
     if(deleted !== undefined) {
@@ -72,9 +73,7 @@ function App() {
         }
         deletedIndex = driver.task.indexOf(deletedObject);
       })
-      console.log(deletedObject)
       deleteTask(index, deletedIndex);
-      console.log(driver)
     }
     setRefreshTask(!refreshTask)
   }
@@ -87,44 +86,125 @@ function App() {
     let today = new Date();
     return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`
   }
+  
+  // FOR CONTENT AND EDITING PURPOSES USING THE TOOLTIP (each appointment onClick())
+  const Content = (({
+      appointmentData, ...restProps
+    }) => (
+      <AppointmentTooltip.Content {...restProps} appointmentData={appointmentData}>
+        <Grid container alignItems="center">
+          <Grid item xs={2}>
+            <Room />
+          </Grid>
+          <Grid item xs={10}>
+            <span>{appointmentData.location}</span>
+          </Grid>
+        </Grid>
+      </AppointmentTooltip.Content>
+  ));
+  const messages = {
+    moreInformationLabel: '',
+  };
+
+  const TextEditor = (props) => {
+    if (props.type === 'multilineTextEditor') {
+      return null;
+    } return <AppointmentForm.TextEditor {...props} />;
+  };
+
+  const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }) => {
+    const onCustomFieldChange = (newLocation) => {
+      onFieldChange({ location: newLocation });
+      console.log(newLocation)
+    };
+    return (
+      <AppointmentForm.BasicLayout
+        appointmentData={appointmentData}
+        onFieldChange={onFieldChange}
+        {...restProps}
+      >
+        <AppointmentForm.Label
+          text="Location"
+          type="title"
+        />
+        <AppointmentForm.TextEditor
+          value={appointmentData.location}
+          onValueChange={onCustomFieldChange}
+          placeholder={appointmentData.location}
+        />
+      </AppointmentForm.BasicLayout>
+    );
+  };
+  /**********************************************************************************/
 
   return (
     <div className="App">
       {refreshTask}
       <Navbar>
-          <a href="#" className="icon-button" onClick={() => setToggleDropdown(!toggleDropdown)}>
-            Select a driver
-          </a>
+        <div className="driver-container">
+          <button className="driver-button" onClick={() => setToggleDropdown(!toggleDropdown)}>Select a driver</button>
+        </div>
+        <div className="driver-dropdown">
           {toggleDropdown && <Dropdown>
             {state.drivers.map(driver => {
               return <DropdownItem
                       key={driver.id}
                       onClick={() => {
                         setDriver(driver);
-                        setToggleDropdown(!toggleDropdown)
+                        setToggleDropdown(!toggleDropdown);
+                        setToggleDownloadButton(true);
+                        setToggleCreateBtn(true);
                       }}>
                         {driver.firstName}
                       </DropdownItem>
             })}
           </Dropdown>}
-          <button onClick={fill}>Fill</button>
-          <button onClick={() => downloadCSV(index, 7)}>download</button>
-          <a href="#" className="icon-button" onClick={() => setToggleDownload(!toggleDownload)}>
-            downloadby
-          </a>
-          {toggleDownload && <Dropdown>
-            <DropdownItem onClick={() => downloadCSV(index, 2)}>2</DropdownItem>
-            <DropdownItem onClick={() => downloadCSV(index, 4)}>4</DropdownItem>
-            <DropdownItem onClick={() => downloadCSV(index, 7)}>7</DropdownItem>
-            <DropdownItem onClick={() => downloadCSV(index, 14)}>14</DropdownItem>
-            <DropdownItem onClick={() => downloadCSV(index, 28)}>28</DropdownItem>
-          </Dropdown>}
+        </div>
+          <div className="download-container">
+            {toggleDownloadButton && 
+            <button className="download-button" 
+              onClick={() => setToggleDownload(!toggleDownload)}>
+                Download
+              </button>}
+          </div>
+          <div className="download-dropdown">
+            {toggleDownload && <Dropdown>
+              <DropdownItem onClick={() =>{
+                setToggleDownload(!toggleDownload);
+                downloadCSV(index, 2);
+              }}>By 2 days</DropdownItem>
+              <DropdownItem onClick={() =>{
+                setToggleDownload(!toggleDownload);
+                downloadCSV(index, 4);
+              }}>By 4 days</DropdownItem>
+              <DropdownItem onClick={() =>{
+                setToggleDownload(!toggleDownload);
+                downloadCSV(index, 7)
+              }}>By 7 days</DropdownItem>
+              <DropdownItem onClick={() =>{
+                setToggleDownload(!toggleDownload);
+                downloadCSV(index, 14)
+              }}>By 14 days</DropdownItem>
+              <DropdownItem onClick={() =>{
+                setToggleDownload(!toggleDownload);
+                downloadCSV(index, 28)
+              }}>By 28 days</DropdownItem>
+            </Dropdown>}
+          </div>
+          <div className="driver-name-container">
+            <span className="driver-name">{driver.firstName} {driver.lastName}</span>
+          </div>
       </Navbar>
-      <button onClick={() => setToggleCreate(!toggleCreate)}>Create new task</button>
-      { toggleCreate && <AddTask onSave={save}/>}
+      {toggleCreateBtn && 
+      <div className="create-button-container">
+        <button className="create-button" onClick={() => setToggleCreate(!toggleCreate)}>Create new task</button>
+        <button onClick={fill}>Fill Aug 26 - 31 with test data</button>
+      </div>}
+      { toggleCreate && <AddTask onSave={save} onClose={closeForm}/>}
+      <div className="schedule-container">
         <Scheduler
           data={driver.task.map((task) => task)}
-          height={660}>
+          height={850}>
           <ViewState defaultCurrentDate={todaysDate()}/>
           <Toolbar/>
           <DateNavigator/>
@@ -135,9 +215,17 @@ function App() {
           <IntegratedEditing/>
           <ConfirmationDialog/>
           <Appointments/>
-          <AppointmentTooltip showCloseButton showOpenButton showDeleteButton/>
-          <AppointmentForm/>
+          <AppointmentTooltip 
+            contentComponent={Content}
+            showCloseButton 
+            showOpenButton 
+            showDeleteButton/>
+          <AppointmentForm
+            basicLayoutComponent={BasicLayout}
+            textEditorComponent={TextEditor}
+            messages={messages}/>
         </Scheduler>
+      </div>
     </div>
   );
 }

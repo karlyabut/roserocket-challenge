@@ -9,8 +9,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: bisque;
-  border: 1px solid black;
+  background-color: #1f2833;
+  border: 1px solid #45a29e;
   border-radius: 8px;
   padding: 2rem;
   z-index: 1000000;
@@ -18,6 +18,81 @@
 .addtask-form {
   display: flex;
   flex-direction: row;
-  height: 500px;;
+  height: 250px;
 }
 
+.description-container > * {
+  margin: 5px;
+}
+
+.create-label {
+  color: #45a29e;
+}
+
+.create-form-button {
+  border: 1px solid #45a29e;
+  border-radius: 10px;
+  background: transparent;
+  color: #45a29e;
+  padding: 5px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+.create-form-button:hover {
+  background-color: #45a29e;
+  border-color: #45a29e;
+  color: #1f2833;
+}
+
+.create-form-button:focus {
+  outline: none;
+}
+
+.close-form-button {
+  border: 1px solid #ff0000;
+  border-radius: 10px;
+  background: transparent;
+  color: #ff0000;
+  padding: 5px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.close-form-button:hover {
+  background-color: #990000;
+  border-color: #990000;
+  color: #c5c6c7;
+}
+
+.close-form-button:focus {
+  outline: none;
+}
+
+.title-input, .date-input, .time-input, .location-input {
+  height: 25px;
+  border-radius: 5px;
+}
+
+.title-input {
+  width: 150px;
+}
+
+.date-input {
+  width: 100px;
+}
+
+.time-input {
+  width: 50px;
+}
+
+.startdate-container, .enddate-container, .location-container  > * {
+  margin: 3px;
+}
