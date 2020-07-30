@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './AddTask.css';
+import Dropdown from '../Dropdown/Dropdown';
+import DropdownItem from '../Dropdown/DropdownItem';
 
 
 function AddTask(props) {
@@ -11,49 +13,23 @@ function AddTask(props) {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [location, setLocation] = useState('')
-
-  function validateMonth(monthString) {
-    let month = monthString.toLowerCase().trim();
-    if(month === "january" || month === "jan") {
-      return 1
-    } else if (month === "february" || month === "feb") {
-      return 2
-    } else if (month === "march" || month === "mar") {
-      return 3
-    } else if (month === "april" || month === "apr") {
-      return 4
-    } else if (month === "may" || month === "may") {
-      return 5
-    } else if (month === "june" || month === "jun") {
-      return 6
-    } else if (month === "july" || month === "jul") {
-      return 7
-    } else if (month === "august" || month === "aug") {
-      return 8
-    } else if (month === "september" || month === "sep") {
-      return 9
-    } else if (month === "october" || month === "oct") {
-      return 10
-    } else if (month === "november" || month === "nov") {
-      return 11
-    } else if (month === "december" || month === "dec") {
-      return 12
-    } else {
-      return 0;
-    }
-  }
+  const [toggleStartMonth, setToggleStartMonth] = useState(false);
+  const [toggleEndMonth, setToggleEndMonth] = useState(false);
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
   function validate() {
-    if(!title || !startMonth || !startDay|| !startTime|| !endMonth || !endDay || !endTime || !location) {
+    if(!title || !startMonth || !startDay|| startTime === '' || !endMonth || !endDay || endTime === '' || !location) {
       alert("All fields are required. Please provide the required texts.")
-    } else if(validateMonth(startMonth) === 0 || validateMonth(endMonth) === 0) {
-      alert("Please enter a valid date. I.E. Jan/January, Feb/February, etc...")
+    } else if(!startMonth || !endMonth || endMonth < startMonth) {
+      alert("Please choose a valid start and end date.")
     } else if(!Number(startDay) || !Number(endDay)) {
       alert("Please enter a valid day.")
-    } else if(!Number(startTime) || !Number(endTime)) {
+    } else if (endDay < startDay && endMonth <= startMonth) {
+      alert("Please enter a valid day.")
+    } else if(isNaN(startTime) || isNaN(endTime)) {
       alert("Please enter a valid time.")
     } else {
-      props.onSave(title, validateMonth(startMonth), Number(startDay), Number(startTime), validateMonth(endMonth), Number(endDay), Number(endTime), location);
+      props.onSave(title, startMonth, Number(startDay), Number(startTime), endMonth, Number(endDay), Number(endTime), location);
     }
   }
   return (
@@ -75,13 +51,27 @@ function AddTask(props) {
           </div>
           <div className="startdate-container">
             <input
+              onClick={() => setToggleStartMonth(!toggleStartMonth)}
               className="date-input"
               name={startMonth}
-              value={startMonth}
+              value={!months[startMonth] ? startMonth : months[startMonth - 1]}
               type='text'
-              placeholder='Enter start month'
+              placeholder='Choose start month'
               onChange={event => setStartMonth(event.target.value)}
             />
+            {toggleStartMonth && 
+                <Dropdown>
+                {months.map(month => 
+                  <DropdownItem
+                    key={months.indexOf(month)}
+                    onClick={() => {
+                      setStartMonth(months.indexOf(month) + 1);
+                      setToggleStartMonth(!toggleStartMonth);
+                    }}>
+                    {month}
+                  </DropdownItem>)}
+              </Dropdown>
+            }
             <input
               className="date-input"
               name={startDay}
@@ -98,18 +88,32 @@ function AddTask(props) {
               placeholder='Time'
               onChange={event => setStartTime(event.target.value)}
             />
-            <button className="create-form-button" onClick={() => setStartTime(startTime <= 12 ? startTime : Number(startTime) - 12)}>AM</button>
-            <button className="create-form-button" onClick={() => setStartTime(startTime <= 12 ? Number(startTime) + 12 : startTime)}>PM</button>
+            <button className="create-form-button" onClick={() => setStartTime(startTime < 12 ? startTime : Number(startTime) - 12)}>AM</button>
+            <button className="create-form-button" onClick={() => setStartTime(startTime < 12 ? Number(startTime) + 12 : startTime)}>PM</button>
           </div>
           <div className="enddate-container">
             <input
+              onClick={() => setToggleEndMonth(!toggleEndMonth)}
               className="date-input"
               name={endMonth}
-              value={endMonth}
+              value={!months[endMonth] ? endMonth : months[endMonth - 1]}
               type='text'
-              placeholder='Enter end month'
+              placeholder='Choose end month'
               onChange={event => setEndMonth(event.target.value)}
             />
+            {toggleEndMonth && 
+                <Dropdown>
+                {months.map(month => 
+                  <DropdownItem
+                    key={months.indexOf(month)}
+                    onClick={() => {
+                      setEndMonth(months.indexOf(month) + 1);
+                      setToggleEndMonth(!toggleEndMonth);
+                    }}>
+                    {month}
+                  </DropdownItem>)}
+              </Dropdown>
+            }
             <input
               className="date-input"
               name={endDay}
@@ -126,8 +130,8 @@ function AddTask(props) {
               placeholder='Time'
               onChange={event => setEndTime(event.target.value)}
             />
-            <button className="create-form-button" onClick={() => setEndTime(endTime <= 12 ? endTime : Number(endTime) - 12)}>AM</button>
-            <button className="create-form-button" onClick={() => setEndTime(endTime <= 12 ? Number(endTime) + 12 : endTime)}>PM</button>
+            <button className="create-form-button" onClick={() => setEndTime(endTime < 12 ? endTime : Number(endTime) - 12)}>AM</button>
+            <button className="create-form-button" onClick={() => setEndTime(endTime < 12 ? Number(endTime) + 12 : endTime)}>PM</button>
           </div>
           <div className="location-container">
             <input

@@ -164,7 +164,7 @@ function App() {
             {toggleDownloadButton && 
             <button className="download-button" 
               onClick={() => setToggleDownload(!toggleDownload)}>
-                Download
+                Download Schedule
               </button>}
           </div>
           <div className="download-dropdown">
