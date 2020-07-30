@@ -1,5 +1,4 @@
 const SET_APPLICATION_DATA = 'SET_APPLICATION_DATA';
-const SET_TASK_DATA = 'SET_TASK_DATA';
 
 function reducer(state, action) {
   switch(action.type) {

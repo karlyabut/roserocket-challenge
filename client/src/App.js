@@ -58,7 +58,7 @@ function App() {
         if(c.id === changedId) {
           changeObject = c
         }
-        changeIndex = driver.task.indexOf(changeObject);
+        return changeIndex = driver.task.indexOf(changeObject);
       })
       console.log("index", changeIndex)
       console.log(changeObject);
@@ -71,7 +71,7 @@ function App() {
         if(task.id === deleted) { //deleted is the task id
           deletedObject = task
         }
-        deletedIndex = driver.task.indexOf(deletedObject);
+        return deletedIndex = driver.task.indexOf(deletedObject);
       })
       deleteTask(index, deletedIndex);
     }

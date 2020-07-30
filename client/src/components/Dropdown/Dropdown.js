@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Dropdown.css'
-import DropdownItem from '../Dropdown/DropdownItem';
 
 function Dropdown(props) {
   return (

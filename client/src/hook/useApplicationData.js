@@ -1,4 +1,4 @@
-import { useEffect, useState, useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import { reducer, SET_APPLICATION_DATA } from '../reducer/application';
 import axios from 'axios';
 
@@ -106,7 +106,7 @@ export function useApplicationData() {
       const seriesOfDates = getDays(timeFrame);
       dates.push(seriesOfDates[0])
       seriesOfDates.reduce((prev, curr) => {
-        dates.push(curr, curr)
+        return dates.push(curr, curr)
       })
       dates.pop(); //remove the last lonely element
       const rangeDates = []
@@ -127,7 +127,7 @@ export function useApplicationData() {
           endDate = new Date(endDate.setDate(endDate.getDate() - 1));
           dates.splice(1, 0, endDate.toISOString());
         }
-        finalDates.push(dates)
+        return finalDates.push(dates)
       })
       return finalDates;
     }
@@ -149,6 +149,7 @@ export function useApplicationData() {
           } else if (task.startDate.split("T")[0] === startDate) {
             days[i][lastIndex].otherCount += 1;
           }
+          return days;
         })
       }
     }
@@ -159,7 +160,7 @@ export function useApplicationData() {
       firstDay = displayMonths[(firstDay.getMonth() + 1) - 1] + "-" + firstDay.getDate();
       let lastDay = new Date(day[day.length - 2]);
       lastDay = displayMonths[(lastDay.getMonth() + 1) - 1] + "-" + lastDay.getDate()
-      data.push([
+      return data.push([
         [`${firstDay} to ${lastDay}`, day[day.length - 1].pickUpCount, day[day.length - 1].dropOffCount, day[day.length - 1].otherCount]
       ])
     })

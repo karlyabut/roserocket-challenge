@@ -11,7 +11,6 @@ function AddTask(props) {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [location, setLocation] = useState('')
-  const [open, setOpen] = useState(false); //open or close the form
 
   function validateMonth(monthString) {
     let month = monthString.toLowerCase().trim();
