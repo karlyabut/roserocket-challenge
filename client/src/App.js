@@ -155,7 +155,7 @@ function App() {
                         setToggleDownloadButton(true);
                         setToggleCreateBtn(true);
                       }}>
-                        {driver.firstName}
+                        {driver.firstName} {driver.lastName}
                       </DropdownItem>
             })}
           </Dropdown>}
