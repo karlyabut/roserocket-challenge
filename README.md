@@ -10,6 +10,7 @@ To run the project simply run **npm run dev**
 # Dispatcher
 
 Initial page of the app which only shows an empty calendar and a drop down where you can choose a drivers schedule
+
 ![](images/driverSelect.png)
 
 Once a driver is chosen then it goes to this page:
@@ -45,6 +46,11 @@ or delete the chosen task
 
 ![](images/deleteTask.png)
 
-If the user wants to export the data into a CSV file, they can click on the __Download Schedule__ where they could choose the time frame from 2, 4, 7, 14 or 28 days counting all the task within the range
+If the user wants to export the data into a CSV file, they can click on the __Download Schedule__ where they could choose the time frame from __2, 4, 7, 14 or 28__ days counting all the task within the range
 
 ![](images/downloadByDays.png)
+
+As for example I chose to download the file with 28 day range, with this example, the driver has 6 task in total __Pick-up: 2, Drop-off: 2 and 2 other activity__
+
+![](images/downloadSchedule.png)
+![](images/spreadsheetSample.png)
